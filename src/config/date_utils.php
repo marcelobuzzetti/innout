@@ -17,6 +17,6 @@ function isBefore($date1, $date2) {
 
 function getNextday($date) {
     $inputDate = getDateAsDateTime($date);
-    $inputDate->modify('+ 1');
+    $inputDate->modify('+1 day');
     return $inputDate;
 }
