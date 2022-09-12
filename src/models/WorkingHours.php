@@ -38,7 +38,7 @@ class WorkingHours extends Model {
     public function innout($time) {
         $timeColumn = $this->getNextTime();
         if(!$timeColumn) {
-            throw new AppException("Você já fex os 4 batimentos do dia!");
+            throw new AppException("Você já fez os 4 batimentos do dia!");
         }
         $this->$timeColumn = $time;
         if($this->id) {
