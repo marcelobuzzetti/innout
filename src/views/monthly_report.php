@@ -1,1 +1,3 @@
-<p>Teste</p>
+<?php
+
+print_r($registries);
