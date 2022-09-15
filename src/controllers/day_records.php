@@ -2,8 +2,6 @@
 session_start();
 requireValidSession();
 
-loadModel('WorkingHours');
-
 /* Deprecated */
 /* $date = (new DateTime())->getTimestamp();
 $today = strftime('%d de %B de %Y', $date); */
