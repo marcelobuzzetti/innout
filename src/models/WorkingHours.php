@@ -109,6 +109,37 @@ class WorkingHours extends Model {
         return "{$sign}{$balanceString}";
     }
 
+    public static function getAbsentUsers() {
+        $today = new DateTime();
+        $result = Database::getResultFromQuery("
+            SELECT name from users
+            WHERE end_date IS NULL
+            AND id NOT IN (
+                SELECT user_id FROM working_hours
+                WHERE work_date = '{$today->format('Y-m-d')}'
+                AND time1 IS NOT NULL
+            )
+        ");
+
+        $absentUsers = [];
+        if($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                array_push($absentUsers, $row['name']);
+            }
+        }
+
+        return $absentUsers;
+    }
+
+    public static function getWorkedTimeInMonth($yearAndMonth) {
+        $startDate = (new DateTime("{$yearAndMonth}-1"))->format('Y-m-d');
+        $endDate = getLastDayofMonth($yearAndMonth)->format('Y-m-d');
+        $result = static::getResultSetFromSelect([
+            'raw' => "work_date BETWEEN '{$startDate}' AND '{$endDate}'"
+        ], "SUM(worked_time) AS sum");
+        return $result->fetch_assoc()['sum'];
+    }
+
     public static function getMonthlyReport($userId, $date) {
         $registries = [];
         $startDate = getFirstDayofMonth($date)->format('Y-m-d');
